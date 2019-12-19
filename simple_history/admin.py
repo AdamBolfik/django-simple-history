@@ -128,7 +128,7 @@ class SimpleHistoryAdmin(admin.ModelAdmin):
         ).model
         obj = get_object_or_404(
             model, **{original_opts.pk.attname: object_id, "history_id": version_id}
-        ).instance
+        )
         obj._state.adding = False
 
         if not self.has_change_permission(request, obj):
@@ -146,7 +146,7 @@ class SimpleHistoryAdmin(admin.ModelAdmin):
         formsets = []
         form_class = self.get_form(request, obj)
         if request.method == "POST":
-            form = form_class(request.POST, request.FILES, instance=obj)
+            form = form_class(request.POST, request.FILES, instance=obj.instance)
             if form.is_valid():
                 new_object = self.save_form(request, form, change=True)
                 self.save_model(request, new_object, form, change=True)
@@ -173,7 +173,7 @@ class SimpleHistoryAdmin(admin.ModelAdmin):
         model_name = original_opts.model_name
         url_triplet = self.admin_site.name, original_opts.app_label, model_name
         context = {
-            "title": _("Revert %s") % force_str(obj),
+            "title": _("Revert %s") % force_str(obj.instance),
             "adminform": admin_form,
             "object_id": object_id,
             "original": obj,
