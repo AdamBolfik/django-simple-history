@@ -3,36 +3,84 @@ Changes
 
 Unreleased
 ----------
-- Add simple filtering if provided a minutes argument in `clean_duplicate_history` (gh-606)
+- Removed support for Django versions prior to 2.2 (gh-652)
+- Migrate from TravisCI to Github Actions (gh-739)
+- Add Python 3.9 support (gh-745)
+- Support ``ignore_conflicts`` in ``bulk_create_with_history`` (gh-733)
+- Use ``asgiref`` when available instead of thread locals (gh-747)
+- Sort imports with isort (gh-751)
+- Queryset ``history.as_of`` speed improvements by calculating in the DB (gh-758)
+
+2.12.0 (2020-10-14)
+-------------------
+- Add default date to ``bulk_create_with_history`` and ``bulk_update_with_history`` (gh-687)
+- Exclude ManyToManyFields when using ``bulk_create_with_history`` (gh-699)
+- Added ``--excluded_fields`` argument to ``clean_duplicate_history`` command (gh-674)
+- Exclude ManyToManyFields when fetching excluded fields (gh-707)
+- Use default model manager for ``bulk_create_with_history`` and
+  ``bulk_update_with_history`` instead of ``objects`` (gh-703)
+- Add optional ``manager`` argument to ``bulk_update_with_history`` to use instead of
+  the default manager (gh-703)
+- Add support for Django 3.1 (gh-713)
+- Fix a bug with ``clean_old_history`` command's `--days` argument (gh-722)
+
+\* NOTE: This will be the last minor release before 3.0.0.
+
+2.11.0 (2020-06-20)
+-------------------
+- Added ``clean_old_history`` management command (gh-675)
+- Added ``user_db_constraint`` param to history to avoid circular reference on delete (gh-676)
+- Leverages ``get_user`` from ``HistoricalRecords`` in order to set a fallback user on
+  bulk update and bulk create (gh-677)
+
+2.10.0 (2020-04-27)
+-------------------
+- Added ``bulk_update_with_history`` utility function (gh-650)
+- Add default user and default change reason to ``bulk_create_with_history`` and ``bulk_update_with_history`` (gh-653)
+- Add french translation (gh-654)
+- Start using ``_change_reason`` instead of ``changeReason`` to add change reasons to historical
+  objects. ``changeReason`` is deprecated and will be removed in version ``3.0.0`` (gh-655)
+
+2.9.0 (2020-04-23)
+------------------
+- Add simple filtering if provided a minutes argument in ``clean_duplicate_history`` (gh-606)
+- Add setting to convert ``FileField`` to ``CharField`` instead of ``TextField`` (gh-625)
+- Added notes on BitBucket Pipelines (gh-627)
+- import model ``ContentType`` in ``SimpleHistoryAdmin`` using ``django_apps.get_model``
+  to avoid possible ``AppRegistryNotReady`` exception (gh-630)
+- Fix ``utils.update_change_reason`` when user specifies excluded_fields (gh-637)
+- Changed how ``now`` is imported from ``timezone`` (``timezone`` module is imported now) (gh-643)
+- ``settings.SIMPLE_HISTORY_REVERT_DISABLED`` if True removes the Revert
+  button from the history form for all historical models (gh-632))
 
 2.8.0 (2019-12-02)
 ------------------
-- Fixed `bulk_create_with_history support` for HistoryRecords with `relation_name` attribute (gh-591)
-- Added support for `bulk_create_with_history` for databases different from PostgreSQL (gh-577)
-- Fixed `DoesNotExist` error when trying to get instance if object is deleted (gh-571)
-- Fix `model_to_dict` to detect changes in a parent model when using
-  `inherit=True` (backwards-incompatible for users who were directly
+- Fixed ``bulk_create_with_history support`` for HistoryRecords with ``relation_name`` attribute (gh-591)
+- Added support for ``bulk_create_with_history`` for databases different from PostgreSQL (gh-577)
+- Fixed ``DoesNotExist`` error when trying to get instance if object is deleted (gh-571)
+- Fix ``model_to_dict`` to detect changes in a parent model when using
+  ``inherit=True`` (backwards-incompatible for users who were directly
   using previous version) (gh-576)
-- Use an iterator for `clean_duplicate_history` (gh-604)
+- Use an iterator for ``clean_duplicate_history`` (gh-604)
 - Add support for Python 3.8 and Django 3.0 (gh-610)
 
 2.7.3 (2019-07-15)
 ------------------
-- Fixed BigAutoField not mirrored as BigInt (gh-556)
-- Fixed most_recent() bug with excluded_fields (gh-561)
+- Fixed ``BigAutoField`` not mirrored as ``BigInt`` (gh-556)
+- Fixed ``most_recent()`` bug with ``excluded_fields`` (gh-561)
 - Added official Django 2.2 support (gh-555)
 
 2.7.2 (2019-04-17)
 ------------------
-- Fixed ModuleNotFound issue for `six` (gh-553)
+- Fixed ModuleNotFound issue for ``six`` (gh-553)
 
 2.7.1 (2019-04-16)
 ------------------
 - Added the possibility to create a relation to the original model (gh-536)
 - Fix router backward-compatibility issue with 2.7.0 (gh-539, gh-547)
 - Fix hardcoded history manager (gh-542)
-- Replace deprecated `django.utils.six` with `six` (gh-526)
-- Allow `custom_model_name` parameter to be a callable (gh-489)
+- Replace deprecated ``django.utils.six`` with ``six`` (gh-526)
+- Allow ``custom_model_name`` parameter to be a callable (gh-489)
 
 2.7.0 (2019-01-16)
 ------------------

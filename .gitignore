@@ -16,3 +16,6 @@ htmlcov/
 MANIFEST
 test_files/
 venv/
+.DS_Store
+env
+.vscode

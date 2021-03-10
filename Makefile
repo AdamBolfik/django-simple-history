@@ -44,4 +44,5 @@ release: dist
 	twine upload dist/*
 
 format:
-	black simple_history setup.py runtests.py
+	isort docs simple_history runtests.py setup.py
+	black docs simple_history runtests.py setup.py

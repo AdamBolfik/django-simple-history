@@ -16,11 +16,14 @@ Authors
 - Alexander Anikeev
 - Amanda Ng (`AmandaCLNg <https://github.com/AmandaCLNg>`_)
 - Ben Lawson (`blawson <https://github.com/blawson>`_)
+- Benjamin Mampaey (`bmampaey <https://github.com/bmampaey>`_)
 - `bradford281 <https://github.com/bradford281>`_
 - Brian Armstrong (`barm <https://github.com/barm>`_)
 - Buddy Lindsey, Jr.
 - Brian Dixon
+- Carlos San Emeterio (`Carlos-San-Emeterio <https://github.com/Carlos-San-Emeterio>`_)
 - Christopher Broderick (`uhurusurfa <https://github.com/uhurusurfa>`_)
+- Christopher Johns (`tyrantwave <https://github.com/tyrantwave>`_)
 - Corey Bertram
 - Craig Maloney (`craigmaloney <https://github.com/craigmaloney>`_)
 - Damien Nozay
@@ -31,29 +34,38 @@ Authors
 - David Grochowski (`ThePumpingLemma <https://github.com/ThePumpingLemma>`_)
 - David Hite
 - Dmytro Shyshov (`xahgmah <https://github.com/xahgmah>`_)
+- Edouard Richard (`vied12 <https://github.com/vied12>` _)
 - Eduardo Cuducos
 - Erik van Widenfelt (`erikvw <https://github.com/erikvw>`_)
 - Filipe Pina (@fopina)
 - Florian Eßer
+- François Martin (`martinfrancois <https://github.com/martinfrancois>`_)
 - Frank Sachsenheim
+- George Kettleborough (`georgek <https://github.com/georgek>`_)
 - George Vilches
 - Gregory Bataille
 - Grzegorz Bialy
 - Guillermo Eijo (`guilleijo <https://github.com/guilleijo>`_)
 - Hamish Downer
 - Hanyin Zhang
+- Hernan Esteves (`sevetseh28 <https://github.com/sevetseh28>`_)
+- Jack Cushman (`jcushman <https://github.com/jcushman>`_)
 - James Muranga (`jamesmura <https://github.com/jamesmura>`_)
 - James Pulec
 - Jesse Shapiro
+- Jihoon Baek (`jihoon796 <https://github.com/jihoon796>`_)
 - Jim Gomez
 - Joao Junior (`joaojunior <https://github.com/joaojunior>`_)
 - Joao Pedro Francese
 - `jofusa <https://github.com/jofusa>`_
 - John Whitlock
 - Jonathan Leroy
+- Jonathan Loo (`alpha1d3d <https://github.com/alpha1d3d>`_)
 - Jonathan Sanchez
 - Jonathan Zvesper (`zvesp <https://github.com/zvesp>`_)
+- Jordon Wing  (`jordonwii <https://github.com/jordonwii`_)
 - Josh Fyne
+- Keith Hackbarth
 - Kevin Foster
 - Klaas van Schelven
 - Kris Neuharth
@@ -67,6 +79,7 @@ Authors
 - Marty Alchin
 - Matheus Cansian (`mscansian <https://github.com/mscansian>`_)
 - Mauricio de Abreu Antunes
+- Maxim Zemskov (`MaximZemskov <https://github.com/MaximZemskov>`_)
 - Micah Denbraver
 - Michael England
 - Miguel Vargas
@@ -78,6 +91,7 @@ Authors
 - Prakash Venkatraman (`dopatraman <https://github.com/dopatraman>`_)
 - Rajesh Pappula
 - Ray Logel
+- Raynald de Lahondes
 - Roberto Aguilar
 - Rod Xavier Bondoc
 - Ross Lote
@@ -86,12 +100,18 @@ Authors
 - Sergey Ozeranskiy (`ozeranskiy <https://github.com/ozeranskiy>`_)
 - Shane Engelman
 - Steeve Chailloux
+- Stefan Borer (`sbor23 <https://github.com/sbor23>`_)
+- Steven Buss (`sbuss <https://github.com/sbuss>`_)
 - Steven Klass
 - Tommy Beadle (`tbeadle <https://github.com/tbeadle>`_)
 - Trey Hunner (`treyhunner <https://github.com/treyhunner>`_)
 - Ulysses Vilela
 - `vnagendra <https://github.com/vnagendra>`_
 - `yakimka <https://github.com/yakimka>`_
+- `Paulo Peres <https://github.com/PauloPeres>`_
+- `Alex Todorov <https://github.com/atodorov>`_
+- David Smith (`smithdc1 <https://github.com/smithdc1>`_)
+- Shi Han Ng (`shihanng <https://github.com/shihanng>`_)
 
 Background
 ==========

@@ -1,6 +1,10 @@
-from __future__ import unicode_literals
+from pkg_resources import DistributionNotFound, get_distribution
 
-__version__ = "2.8.0"
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    pass
 
 
 def register(

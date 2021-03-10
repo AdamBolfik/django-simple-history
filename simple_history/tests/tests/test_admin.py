@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
+from unittest.mock import ANY, patch
 
+import django
 from django.contrib.admin import AdminSite
 from django.contrib.admin.utils import quote
 from django.contrib.auth import get_user_model
@@ -8,13 +10,13 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.urls import reverse
-import django
-from mock import ANY, patch
+from django.utils.encoding import force_str
 
 from simple_history.admin import SimpleHistoryAdmin
 from simple_history.models import HistoricalRecords
 from simple_history.tests.external.models import ExternalModelWithCustomUserIdField
 from simple_history.tests.tests.utils import middleware_override_settings
+
 from ..models import (
     Book,
     BucketData,
@@ -24,14 +26,10 @@ from ..models import (
     Employee,
     FileModel,
     Person,
+    Planet,
     Poll,
     State,
 )
-
-if django.VERSION < (2,):
-    from django.utils.encoding import force_text as force_str
-else:
-    from django.utils.encoding import force_str
 
 User = get_user_model()
 today = datetime(2021, 1, 1, 10, 0)
@@ -61,19 +59,24 @@ class AdminSiteTest(TestCase):
 
     def tearDown(self):
         try:
-            del HistoricalRecords.thread.request
+            del HistoricalRecords.context.request
         except AttributeError:
             pass
 
-    def login(self, user=None):
-        self.client.force_login(user or self.user)
+    def login(self, user=None, superuser=None):
+        user = user or self.user
+        if superuser is not None:
+            user.is_superuser = True if superuser is None else superuser
+            user.is_active = True
+            user.save()
+        self.client.force_login(user)
 
     def test_history_list(self):
         model_name = self.user._meta.model_name
         self.assertEqual(model_name, "customuser")
         self.login()
         poll = Poll(question="why?", pub_date=today)
-        poll.changeReason = "A random test reason"
+        poll._change_reason = "A random test reason"
         poll._history_user = self.user
         poll.save()
 
@@ -138,12 +141,18 @@ class AdminSiteTest(TestCase):
     def test_history_view_permission(self):
         self.login()
         person = Person.objects.create(name="Sandra Hale")
-        self.client.get(get_history_url(person), status=403)
+
+        resp = self.client.get(get_history_url(person))
+
+        self.assertEqual(403, resp.status_code)
 
     def test_history_form_permission(self):
         self.login(self.user)
         person = Person.objects.create(name="Sandra Hale")
-        self.client.get(get_history_url(person, 0), status=403)
+
+        resp = self.client.get(get_history_url(person, 0))
+
+        self.assertEqual(403, resp.status_code)
 
     def test_invalid_history_form(self):
         self.login()
@@ -262,7 +271,7 @@ class AdminSiteTest(TestCase):
     def test_middleware_unsets_request(self):
         self.login()
         self.client.get(reverse("admin:tests_book_add"))
-        self.assertFalse(hasattr(HistoricalRecords.thread, "request"))
+        self.assertFalse(hasattr(HistoricalRecords.context, "request"))
 
     @override_settings(**middleware_override_settings)
     def test_rolled_back_user_does_not_lead_to_foreign_key_error(self):
@@ -459,12 +468,13 @@ class AdminSiteTest(TestCase):
             "original_opts": ANY,
             "changelist_url": "/admin/tests/poll/",
             "change_url": ANY,
-            "history_url": "/admin/tests/poll/1/history/",
+            "history_url": "/admin/tests/poll/{}/history/".format(poll.id),
             "add": False,
             "change": True,
             "has_add_permission": admin.has_add_permission(request),
             "has_change_permission": admin.has_change_permission(request, poll),
             "has_delete_permission": admin.has_delete_permission(request, poll),
+            "revert_disabled": admin.revert_disabled,
             "has_file_field": True,
             "has_absolute_url": False,
             "form_url": "",
@@ -518,6 +528,7 @@ class AdminSiteTest(TestCase):
             "has_add_permission": admin.has_add_permission(request),
             "has_change_permission": admin.has_change_permission(request, poll),
             "has_delete_permission": admin.has_delete_permission(request, poll),
+            "revert_disabled": admin.revert_disabled,
             "has_file_field": True,
             "has_absolute_url": False,
             "form_url": "",
@@ -565,12 +576,13 @@ class AdminSiteTest(TestCase):
             "original_opts": ANY,
             "changelist_url": "/admin/tests/poll/",
             "change_url": ANY,
-            "history_url": "/admin/tests/poll/1/history/",
+            "history_url": "/admin/tests/poll/{}/history/".format(poll.id),
             "add": False,
             "change": True,
             "has_add_permission": admin.has_add_permission(request),
             "has_change_permission": admin.has_change_permission(request, poll),
             "has_delete_permission": admin.has_delete_permission(request, poll),
+            "revert_disabled": admin.revert_disabled,
             "has_file_field": True,
             "has_absolute_url": False,
             "form_url": "",
@@ -626,6 +638,7 @@ class AdminSiteTest(TestCase):
             "has_add_permission": admin.has_add_permission(request),
             "has_change_permission": admin.has_change_permission(request, obj),
             "has_delete_permission": admin.has_delete_permission(request, obj),
+            "revert_disabled": admin.revert_disabled,
             "has_file_field": True,
             "has_absolute_url": False,
             "form_url": "",
@@ -677,12 +690,13 @@ class AdminSiteTest(TestCase):
             "original_opts": ANY,
             "changelist_url": "/admin/tests/poll/",
             "change_url": ANY,
-            "history_url": "/admin/tests/poll/1/history/",
+            "history_url": "/admin/tests/poll/{}/history/".format(poll.id),
             "add": False,
             "change": True,
             "has_add_permission": admin.has_add_permission(request),
             "has_change_permission": admin.has_change_permission(request, poll),
             "has_delete_permission": admin.has_delete_permission(request, poll),
+            "revert_disabled": admin.revert_disabled,
             "has_file_field": True,
             "has_absolute_url": False,
             "form_url": "",
@@ -696,3 +710,51 @@ class AdminSiteTest(TestCase):
         mock_render.assert_called_once_with(
             request, admin.object_history_form_template, context
         )
+
+    def test_history_view__title_suggests_revert_by_default(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet))
+        self.assertContains(response, "Change history: Sun")
+
+    @override_settings(SIMPLE_HISTORY_REVERT_DISABLED=False)
+    def test_history_view__title_suggests_revert(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet))
+        self.assertContains(response, "Change history: Sun")
+        self.assertContains(response, "Choose a date")
+
+    @override_settings(SIMPLE_HISTORY_REVERT_DISABLED=True)
+    def test_history_view__title_suggests_view_only(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet))
+        self.assertContains(response, "View history: Sun")
+        self.assertNotContains(response, "Choose a date")
+
+    def test_history_form_view__shows_revert_button_by_default(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet, 0))
+        self.assertContains(response, "Revert Planet")
+        self.assertContains(response, "Revert Sun")
+        self.assertContains(response, "Press the 'Revert' button")
+
+    @override_settings(SIMPLE_HISTORY_REVERT_DISABLED=False)
+    def test_history_form_view__shows_revert_button(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet, 0))
+        self.assertContains(response, "Revert Planet")
+        self.assertContains(response, "Revert Sun")
+        self.assertContains(response, "Press the 'Revert' button")
+
+    @override_settings(SIMPLE_HISTORY_REVERT_DISABLED=True)
+    def test_history_form_view__does_not_show_revert_button(self):
+        self.login()
+        planet = Planet.objects.create(star="Sun")
+        response = self.client.get(get_history_url(planet, 0))
+        self.assertContains(response, "View Planet")
+        self.assertContains(response, "View Sun")
+        self.assertNotContains(response, "Revert")
